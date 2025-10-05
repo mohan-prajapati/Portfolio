@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bazaar Vista — Indian E‑Commerce Dashboard</title>
+  <style>
+    :root{
+      --bg: #0f1724;
+      --card: linear-gradient(135deg,#0b1220 0%, #122032 100%);
+      --muted: #9aa7b7;
+      --accent: #FF9933; /* Saffron */
+      --accent-2: #138808; /* Green */
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --success: #34D399;
+      --danger: #F97373;
+      --warning: #FBBF24;
+      --shadow: 0 8px 30px rgba(2,6,23,0.6);
+      --radius: 12px;
+      --glass-border: rgba(255,255,255,0.04);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071026 0%, #081226 60%);color:#e6eef8}
+    a{color:inherit}
+
+    /*FRAME*/
+    .app{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:28px;min-height:100vh}
+    @media (max-width:900px){.app{grid-template-columns:1fr;padding:16px} .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-110%);z-index:60;transition:transform .28s ease;background:linear-gradient(180deg,#081226,#071026);box-shadow:var(--shadow)} .sidebar.show{transform:translateX(0)} .mobile-toggle{display:inline-flex}}
+
+    /*SIDEBAR*/
+    .sidebar{background:var(--card);padding:20px;border-radius:14px;height:calc(100vh - 56px);display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow)}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:700;color:#fff}
+    .brand h1{font-size:16px;margin:0}
+    .nav{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+    .nav a{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;color:var(--muted);text-decoration:none;transition:all 0.2s ease}
+    .nav a.active, .nav a:hover{background:linear-gradient(90deg,rgba(19,136,8,0.12),rgba(255,153,51,0.06));color:#fff}
+    .nav svg{opacity:.88}
+
+    /*HEADER + CONTENT*/
+    .main{display:flex;flex-direction:column;gap:18px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .searchbar{flex:1;display:flex;align-items:center;gap:12px;background:var(--glass);backdrop-filter: blur(6px);padding:10px;border-radius:12px;border:1px solid var(--glass-border);transition:all 0.2s ease}
+    .searchbar:focus-within{box-shadow:0 0 0 2px rgba(255,153,51,0.3)}
+    .searchbar input{flex:1;background:transparent;border:0;color:inherit;outline:none;font-size:14px}
+    .controls{display:flex;gap:12px;align-items:center}
+    .btn{padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent-2),var(--accent));box-shadow:0 6px 20px rgba(19,136,8,0.12);cursor:pointer;color:#fff;font-weight:600;transition:all 0.2s ease}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(19,136,8,0.2)}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:10px;transition:all 0.2s ease}
+    .ghost:hover{background:rgba(255,255,255,0.05)}
+
+    /*GRID*/
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{grid-column:span 4;background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--glass-border);transition:all 0.3s ease;position:relative;overflow:hidden}
+    .card:hover{transform:translateY(-5px);box-shadow:0 12px 35px rgba(2,6,23,0.8)}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent-2),var(--accent));opacity:0;transition:opacity 0.3s ease}
+    .card:hover::before{opacity:1}
+    .card-wide{grid-column:span 8}
+    @media (max-width:900px){.card{grid-column:span 12}.card-wide{grid-column:span 12}.top{flex-direction:column;align-items:stretch}.controls{justify-content:flex-end}}
+
+    .kpi{display:flex;flex-direction:column;gap:8px}
+    .kpi .title{color:var(--muted);font-size:13px}
+    .kpi .value{font-size:20px;font-weight:700}
+    .spark{height:48px;width:100%;}
+
+    /*PRODUCT LIST*/
+    .table{width:100%;border-collapse:collapse;margin-top:12px}
+    .table thead th{font-size:12px;color:var(--muted);text-align:left;padding:10px 8px}
+    .table tbody td{padding:10px 8px;border-top:1px solid rgba(255,255,255,0.03);vertical-align:middle}
+    .product-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;transition:transform 0.3s ease}
+    .product-thumb:hover{transform:scale(1.1)}
+    .badge{padding:6px 8px;border-radius:999px;font-size:12px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);display:inline-flex;align-items:center;gap:8px}
+
+    /*ORDERS*/
+    .orders-list{display:flex;flex-direction:column;gap:12px}
+    .order{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:var(--glass-2);border:1px solid rgba(255,255,255,0.02);transition:all 0.2s ease}
+    .order:hover{background:rgba(255,255,255,0.05)}
+    .status{padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px}
+    .status.paid{background:rgba(52,211,153,0.12);color:var(--success)}
+    .status.pending{background:rgba(250,204,21,0.08);color:var(--warning)}
+    .status.cancel{background:rgba(249,115,115,0.06);color:var(--danger)}
+
+    /*MODAL*/
+    .modal-bg{position:fixed;left:0;right:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(2,6,23,0.6),rgba(2,6,23,0.8));display:none;align-items:center;justify-content:center;z-index:80;animation:fadeIn 0.3s ease}
+    .modal-bg.show{display:flex}
+    .modal{width:720px;max-width:96%;background:linear-gradient(180deg,#071425,#081227);padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.04);animation:slideUp 0.3s ease}
+    .form-row{display:flex;gap:12px}
+    .form-row > *{flex:1}
+    .input{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:inherit;transition:all 0.2s ease}
+    .input:focus{border-color:var(--accent-2);box-shadow:0 0 0 2px rgba(19,136,8,0.1)}
+
+    /*FOOT*/
+    footer{opacity:.6;font-size:13px;color:var(--muted);padding:8px 0}
+
+    /*TOOLTIP*/
+    .hint{font-size:13px;color:var(--muted)}
+
+    /*nice scroll*/
+    .sidebar, .orders-list, .card{overflow:auto}
+    ::-webkit-scrollbar{height:8px;width:8px}
+    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.04);border-radius:10px}
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse { animation: pulse 2s infinite; }
+    
+    /* Progress bars */
+    .progress-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+    .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
+    
+    /* Notification */
+    .notification { position: fixed; top: 20px; right: 20px; padding: 12px 16px; background: var(--card); border-radius: 8px; box-shadow: var(--shadow); border-left: 3px solid var(--success); z-index: 100; transform: translateX(150%); transition: transform 0.3s ease; }
+    .notification.show { transform: translateX(0); }
+    
+    /* Stats cards */
+    .stat-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; border-radius: var(--radius); background: var(--glass); border: 1px solid var(--glass-border); }
+    .stat-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--muted); }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .tab { padding: 8px 16px; border-radius: 8px; background: transparent; border: 1px solid transparent; color: var(--muted); cursor: pointer; transition: all 0.2s ease; }
+    .tab.active { background: rgba(19,136,8,0.1); color: var(--accent-2); border-color: rgba(19,136,8,0.2); }
+    
+    /* Loading spinner */
+    .spinner { width: 24px; height: 24px; border: 2px solid rgba(255,255,255,0.1); border-left-color: var(--accent-2); border-radius: 50%; animation: spin 1s linear infinite; }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Dark mode toggle */
+    .theme-toggle { position: relative; width: 48px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; }
+    .theme-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: var(--accent-2); border-radius: 50%; transition: all 0.3s ease; }
+    .theme-toggle.active { background: rgba(19,136,8,0.3); }
+    .theme-toggle.active::after { left: 26px; }
+    
+    /* Indian flag colors accent */
+    .indian-flag { display: inline-block; width: 16px; height: 12px; background: linear-gradient(to bottom, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%); margin-right: 8px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="logo">BV</div>
+        <div>
+          <h1>Bazaar Vista</h1>
+          <div class="hint" style="font-size:12px">Dashboard • Manage products & orders</div>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Main Navigation">
+        <a href="#" class="active" data-section="overview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 13h8V3H3v10zM13 21h8V11h-8v10zM13 3v6h8V3h-8zM3 21h8v-6H3v6z" fill="currentColor" opacity=".9"/></svg>
+          Overview
+        </a>
+        <a href="#" data-section="products">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v8c0 4-3 7-7 7s-7-3-7-7V6l7-4z" fill="currentColor"/></svg>
+          Products
+        </a>
+        <a href="#" data-section="orders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 3h18v2H3V3zm2 4h14l-1.5 9h-11L5 7zM9 20a2 2 0 11.001-3.999A2 2 0 019 20zm6 0a2 2 0 11.001-3.999A2 2 0 0115 20z" fill="currentColor"/></svg>
+          Orders
+        </a>
+        <a href="#" data-section="analytics">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 3h3v18H3V3zm6 6h3v12H9V9zm6-4h3v16h-3V5z" fill="currentColor"/></svg>
+          Analytics
+        </a>
+        <a href="#" data-section="settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7zM19.4 12a7.4 7.4 0 00-.1-1l2.1-1.6-2-3.4-2.5 1a7.5 7.5 0 00-1.7-1L15.5 2h-3l-.6 3.5a7.5 7.5 0 00-1.7 1L7.7 6.1 5.7 9.5 7.8 11A7.4 7.4 0 007.7 12c0 .3 0 .7.1 1L5.7 14.6l2 3.4 2.5-1a7.5 7.5 0 001.7 1L12.5 22h3l.6-3.5a7.5 7.5 0 001.7-1l2.5 1 2-3.4-2.1-1.6c.1-.3.1-.7.1-1z" fill="currentColor"/></svg>
+          Settings
+        </a>
+
+        <div style="margin-top:auto;display:flex;gap:10px;align-items:center;">
+          <div style="display:flex;flex-direction:column">
+            <div style="font-weight:700">Namaste Store</div>
+            <div class="hint">Plan: Premium • 5 seats</div>
+          </div>
+          <button class="ghost" id="sidebarClose" style="margin-left:auto;display:none">Close</button>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="top">
+        <div class="searchbar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/></svg>
+          <input id="globalSearch" placeholder="Search products, orders, customers..." />
+        </div>
+        <div class="controls">
+          <button class="ghost" id="mobileMenu">☰</button>
+          <div class="theme-toggle" id="themeToggle"></div>
+          <button class="btn" id="addProductBtn">+ Add Product</button>
+        </div>
+      </div>
+
+      <!-- SECTIONS -->
+      <section id="overview" class="content-section">
+        <div class="grid">
+          <div class="card">
+            <div class="kpi">
+              <div class="title">Today's Revenue</div>
+              <div class="value">₹<span id="kpiRevenue">0</span></div>
+              <canvas id="spark1" class="spark"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="kpi">
+              <div class="title">Orders</div>
+              <div class="value" id="kpiOrders">0</div>
+              <div class="hint"><span id="ordersChange">+0%</span> vs yesterday</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="kpi">
+              <div class="title">Active Products</div>
+              <div class="value" id="kpiProducts">0</div>
+              <div class="hint">Stock & growth overview</div>
+            </div>
+          </div>
+
+          <div class="card-wide card">
+            <h3 style="margin:0 0 12px 0">Sales Overview</h3>
+            <canvas id="mainChart" style="width:100%;height:260px"></canvas>
+          </div>
+
+          <div class="card card-wide" style="grid-column:span 4">
+            <h3 style="margin:0 0 12px 0">Top Selling</h3>
+            <table class="table" id="topSellingTable">
+              <thead><tr><th>Product</th><th>Sold</th><th>Revenue</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          
+          <div class="card card-wide">
+            <h3 style="margin:0 0 12px 0">Performance Metrics</h3>
+            <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 12px;">
+              <div class="stat-card">
+                <div class="stat-value" id="avgOrderValue">₹0</div>
+                <div class="stat-label">Avg. Order Value</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="conversionRate">0%</div>
+                <div class="stat-label">Conversion Rate</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="customerSatisfaction">0%</div>
+                <div class="stat-label">Satisfaction</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="returnRate">0%</div>
+                <div class="stat-label">Return Rate</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="products" class="content-section" style="display:none">
+        <div class="tabs">
+          <div class="tab active" data-tab="all">All Products</div>
+          <div class="tab" data-tab="low-stock">Low Stock</div>
+          <div class="tab" data-tab="out-of-stock">Out of Stock</div>
+        </div>
+        
+        <div class="card-wide card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h2 style="margin:0">Products</h2>
+            <div class="hint">Manage inventory — add, edit, delete products</div>
+          </div>
+
+          <table class="table" id="productsTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="orders" class="content-section" style="display:none">
+        <div class="grid">
+          <div class="card card-wide">
+            <h3>Recent Orders</h3>
+            <div class="orders-list" id="ordersList"></div>
+          </div>
+
+          <div class="card">
+            <h3>Order Stats</h3>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+              <div class="badge">Total: <strong id="totalOrders">0</strong></div>
+              <div class="badge">Pending: <strong id="pendingOrders">0</strong></div>
+              <div class="badge">Delivered: <strong id="deliveredOrders">0</strong></div>
+              <div class="badge">Canceled: <strong id="canceledOrders">0</strong></div>
+            </div>
+            
+            <h4 style="margin-top: 16px;">Order Status</h4>
+            <div style="margin-top: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span>Paid</span>
+                <span id="paidPercent">0%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="paidProgress" style="width: 0%"></div>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px;">
+                <span>Pending</span>
+                <span id="pendingPercent">0%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="pendingProgress" style="width: 0%; background: var(--warning)"></div>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px;">
+                <span>Canceled</span>
+                <span id="canceledPercent">0%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="canceledProgress" style="width: 0%; background: var(--danger)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="analytics" class="content-section" style="display:none">
+        <div class="grid">
+          <div class="card card-wide">
+            <h3>Revenue Breakdown</h3>
+            <canvas id="donut" style="width:100%;height:240px"></canvas>
+          </div>
+
+          <div class="card">
+            <h3>Traffic</h3>
+            <div class="hint">Channels: Organic, Ads, Referral</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+              <div class="badge">Organic <strong id="organicPct">0%</strong></div>
+              <div class="badge">Ads <strong id="adsPct">0%</strong></div>
+              <div class="badge">Referral <strong id="refPct">0%</strong></div>
+            </div>
+          </div>
+          
+          <div class="card card-wide">
+            <h3>Customer Demographics</h3>
+            <div class="grid" style="grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 12px;">
+              <div>
+                <h4 style="margin: 0 0 8px 0;">Top Cities</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Mumbai</span>
+                    <span>22%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 22%"></div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Delhi</span>
+                    <span>18%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 18%"></div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Bangalore</span>
+                    <span>15%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 15%"></div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Chennai</span>
+                    <span>12%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 12%"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h4 style="margin: 0 0 8px 0;">Payment Methods</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>UPI</span>
+                    <span>45%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%"></div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Credit Card</span>
+                    <span>25%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 25%"></div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>Debit Card</span>
+                    <span>20%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 20%"></div>
+                  </div>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                    <span>COD</span>
+                    <span>10%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 10%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="settings" class="content-section" style="display:none">
+        <div class="card-wide card">
+          <h3>Settings</h3>
+          <div style="display:flex;gap:12px;margin-top:12px">
+            <div style="flex:2">
+              <label class="hint">Store name</label>
+              <input class="input" id="storeName" value="Namaste Store" />
+            </div>
+            <div style="flex:1">
+              <label class="hint">Currency</label>
+              <input class="input" id="currency" value="INR" readonly />
+            </div>
+          </div>
+          
+          <div style="margin-top: 16px;">
+            <label class="hint">Store Description</label>
+            <textarea class="input" id="storeDescription" rows="3" placeholder="Enter a description for your store..." style="width: 100%; resize: vertical;">Authentic Indian products for modern lifestyles</textarea>
+          </div>
+          
+          <div style="margin-top: 16px;">
+            <h4>Notification Preferences</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" checked />
+                <span>New orders</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" checked />
+                <span>Low stock alerts</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" />
+                <span>Festival season offers</span>
+              </label>
+            </div>
+          </div>
+          
+          <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+            <button class="btn" id="saveSettings">Save Settings</button>
+          </div>
+        </div>
+      </section>
+
+      <footer><span class="indian-flag"></span> Made with ♥ for Indian e‑commerce — responsive, colorful, and easily extensible.</footer>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="modalTitle">Add Product</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+        <input id="pName" class="input" placeholder="Product name" />
+        <div class="form-row">
+          <input id="pPrice" class="input" placeholder="Price (e.g. 1299)" />
+          <input id="pStock" class="input" placeholder="Stock (e.g. 12)" />
+        </div>
+        <div class="form-row">
+          <select id="pCategory" class="input">
+            <option value="">Select Category</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Jewellery">Jewellery</option>
+            <option value="Home Decor">Home Decor</option>
+            <option value="Spices">Spices</option>
+            <option value="Handicrafts">Handicrafts</option>
+          </select>
+          <input id="pImage" class="input" placeholder="Image URL (optional)" />
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="ghost" id="closeModal">Cancel</button>
+          <button class="btn" id="saveProduct">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <div id="notificationMessage">Product added successfully!</div>
+  </div>
+
+  <script>
+    // Sample application state with Indian products
+    const sampleProducts = [
+      {id:1,name:'Kurta Set',price:1299,stock:34,category:'Clothing',image:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=200&q=60',sold:120},
+      {id:2,name:'Silver Jhumkas',price:899,stock:12,category:'Jewellery',image:'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=200&q=60',sold:82},
+      {id:3,name:'Brass Diya Set',price:499,stock:54,category:'Home Decor',image:'https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?auto=format&fit=crop&w=200&q=60',sold:44},
+      {id:4,name:'Handmade Jute Bag',price:699,stock:7,category:'Handicrafts',image:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=200&q=60',sold:60},
+      {id:5,name:'Spice Box Set',price:1199,stock:150,category:'Spices',image:'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=200&q=60',sold:210}
+    ];
+
+    const sampleOrders = [
+      {id:'#1001',customer:'Priya Sharma',total:2198,status:'paid',date:'2025-09-28'},
+      {id:'#1002',customer:'Rahul Kumar',total:1299,status:'pending',date:'2025-09-29'},
+      {id:'#1003',customer:'Anjali Patel',total:499,status:'paid',date:'2025-09-29'},
+      {id:'#1004',customer:'Vikram Singh',total:1898,status:'cancel',date:'2025-09-30'}
+    ];
+
+    // State
+    let products = JSON.parse(localStorage.getItem('products_v1')) || sampleProducts;
+    let orders = JSON.parse(localStorage.getItem('orders_v1')) || sampleOrders;
+    let editingProductId = null;
+    let currentProductFilter = 'all';
+
+    // Utilities
+    const $ = q=>document.querySelector(q);
+    const $$ = q=>document.querySelectorAll(q);
+
+    function formatCurrency(v){
+      return '₹' + parseFloat(v).toLocaleString('en-IN');
+    }
+    
+    function showNotification(message, type = 'success') {
+      const notification = $('#notification');
+      notification.querySelector('#notificationMessage').textContent = message;
+      
+      // Set border color based on type
+      if (type === 'error') {
+        notification.style.borderLeftColor = 'var(--danger)';
+      } else if (type === 'warning') {
+        notification.style.borderLeftColor = 'var(--warning)';
+      } else {
+        notification.style.borderLeftColor = 'var(--success)';
+      }
+      
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Rendering
+    function renderKPIs(){
+      const revenueToday = orders.reduce((s,o)=>s+o.total,0);
+      $('#kpiRevenue').textContent = revenueToday.toLocaleString('en-IN');
+      $('#kpiOrders').textContent = orders.length;
+      $('#kpiProducts').textContent = products.length;
+      // small changes
+      $('#ordersChange').textContent = '+4.2%';
+      
+      // Additional metrics
+      const avgOrderValue = orders.length > 0 ? orders.reduce((s,o)=>s+o.total,0) / orders.length : 0;
+      $('#avgOrderValue').textContent = formatCurrency(avgOrderValue);
+      $('#conversionRate').textContent = '3.2%';
+      $('#customerSatisfaction').textContent = '94%';
+      $('#returnRate').textContent = '2.1%';
+    }
+
+    function renderProducts(){
+      const tbody = $('#productsTable tbody'); 
+      tbody.innerHTML='';
+      
+      let filteredProducts = products;
+      
+      if (currentProductFilter === 'low-stock') {
+        filteredProducts = products.filter(p => p.stock > 0 && p.stock <= 10);
+      } else if (currentProductFilter === 'out-of-stock') {
+        filteredProducts = products.filter(p => p.stock === 0);
+      }
+      
+      filteredProducts.forEach(p=>{
+        const status = p.stock === 0 ? 'Out of Stock' : p.stock <= 10 ? 'Low Stock' : 'In Stock';
+        const statusClass = p.stock === 0 ? 'status cancel' : p.stock <= 10 ? 'status pending' : 'status paid';
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="display:flex;gap:12px;align-items:center">
+            <img src="${p.image||'https://via.placeholder.com/80'}" class="product-thumb" alt=""/>
+            <div>
+              <div style="font-weight:700">${p.name}</div>
+              <div class="hint">ID: ${p.id} • ${p.category}</div>
+            </div>
+          </td>
+          <td>${formatCurrency(p.price)}</td>
+          <td>${p.stock}</td>
+          <td>${p.category}</td>
+          <td><span class="${statusClass}">${status}</span></td>
+          <td style="text-align:right">
+            <button class="ghost" onclick="editProduct(${p.id})">Edit</button>
+            <button class="ghost" style="margin-left:8px" onclick="deleteProduct(${p.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      })
+      
+      // top selling
+      const topBody = $('#topSellingTable tbody'); topBody.innerHTML='';
+      const top = [...products].sort((a,b)=>b.sold-a.sold).slice(0,5);
+      top.forEach(t=>{
+        const r=document.createElement('tr');
+        r.innerHTML=`<td>${t.name}</td><td>${t.sold}</td><td>${formatCurrency(t.sold*t.price)}</td>`;
+        topBody.appendChild(r);
+      });
+    }
+
+    function renderOrders(){
+      const list = $('#ordersList'); list.innerHTML='';
+      orders.forEach(o=>{
+        const el = document.createElement('div'); el.className='order';
+        el.innerHTML = `
+          <div>
+            <div style="font-weight:700">${o.customer} <span class="hint">${o.id}</span></div>
+            <div class="hint">${o.date}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="text-align:right"><div style="font-weight:700">${formatCurrency(o.total)}</div><div class="hint">items: 1</div></div>
+            <div class="status ${o.status}">${o.status}</div>
+          </div>
+        `;
+        list.appendChild(el);
+      })
+      
+      const totalOrders = orders.length;
+      const paidOrders = orders.filter(o=>o.status==='paid').length;
+      const pendingOrders = orders.filter(o=>o.status==='pending').length;
+      const canceledOrders = orders.filter(o=>o.status==='cancel').length;
+      
+      $('#totalOrders').textContent = totalOrders;
+      $('#pendingOrders').textContent = pendingOrders;
+      $('#deliveredOrders').textContent = paidOrders;
+      $('#canceledOrders').textContent = canceledOrders;
+      
+      // Update progress bars
+      const paidPercent = totalOrders > 0 ? Math.round((paidOrders / totalOrders) * 100) : 0;
+      const pendingPercent = totalOrders > 0 ? Math.round((pendingOrders / totalOrders) * 100) : 0;
+      const canceledPercent = totalOrders > 0 ? Math.round((canceledOrders / totalOrders) * 100) : 0;
+      
+      $('#paidPercent').textContent = paidPercent + '%';
+      $('#pendingPercent').textContent = pendingPercent + '%';
+      $('#canceledPercent').textContent = canceledPercent + '%';
+      
+      $('#paidProgress').style.width = paidPercent + '%';
+      $('#pendingProgress').style.width = pendingPercent + '%';
+      $('#canceledProgress').style.width = canceledPercent + '%';
+    }
+
+    // Persistence
+    function saveAll(){localStorage.setItem('products_v1',JSON.stringify(products));localStorage.setItem('orders_v1',JSON.stringify(orders))}
+
+    // CRUD
+    function openModal(edit=false){
+      $('#modalBg').classList.add('show');
+      if(!edit){ 
+        $('#modalTitle').textContent='Add Product'; 
+        $('#pName').value=''; 
+        $('#pPrice').value=''; 
+        $('#pStock').value=''; 
+        $('#pCategory').value=''; 
+        $('#pImage').value=''; 
+        editingProductId=null; 
+      }
+    }
+    
+    function closeModal(){
+      document.getElementById('modalBg').classList.remove('show'); 
+      editingProductId=null;
+    }
+    
+    function saveProduct(){
+      const name = $('#pName').value.trim(); 
+      const price = parseFloat($('#pPrice').value)||0; 
+      const stock = parseInt($('#pStock').value)||0; 
+      const category = $('#pCategory').value||'General'; 
+      const image = $('#pImage').value.trim();
+      
+      if(!name) return showNotification('Please provide a product name', 'error');
+      if(!price || price <= 0) return showNotification('Please provide a valid price', 'error');
+      if(!category) return showNotification('Please select a category', 'error');
+      
+      if(editingProductId){
+        const p = products.find(x=>x.id===editingProductId); 
+        Object.assign(p,{name,price,stock,category,image});
+        showNotification('Product updated successfully!');
+      } else {
+        const id = Date.now(); 
+        products.unshift({id,name,price,stock,category,image,sold:0});
+        showNotification('Product added successfully!');
+      }
+      saveAll(); 
+      renderProducts(); 
+      renderKPIs(); 
+      closeModal();
+    }
+    
+    function editProduct(id){
+      const p = products.find(x=>x.id===id); 
+      if(!p) return; 
+      editingProductId=id; 
+      $('#modalTitle').textContent='Edit Product'; 
+      $('#pName').value=p.name; 
+      $('#pPrice').value=p.price; 
+      $('#pStock').value=p.stock; 
+      $('#pCategory').value=p.category; 
+      $('#pImage').value=p.image; 
+      $('#modalBg').classList.add('show');
+    }
+    
+    function deleteProduct(id){ 
+      if(!confirm('Delete product?')) return; 
+      products = products.filter(p=>p.id!==id); 
+      saveAll(); 
+      renderProducts(); 
+      renderKPIs(); 
+      showNotification('Product deleted successfully!');
+    }
+
+    // Simple charts via canvas
+    function drawSpark(ctx, data){
+      const w=ctx.canvas.width,h=ctx.canvas.height; ctx.clearRect(0,0,w,h);
+      ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.lineCap='round';
+      // gradient
+      const grad=ctx.createLinearGradient(0,0,w,0); grad.addColorStop(0,'var(--accent-2)'); grad.addColorStop(1,'var(--accent)');
+      ctx.strokeStyle=grad; ctx.beginPath();
+      const mx=Math.max(...data); const mn=Math.min(...data);
+      data.forEach((v,i)=>{const x=(i/(data.length-1))*(w-8)+4; const y = h - ((v-mn)/(mx-mn||1))*(h-8)-4; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)});
+      ctx.stroke();
+    }
+
+    function drawMainChart(){
+      const c=document.getElementById('mainChart'); const ctx=c.getContext('2d'); c.width=c.clientWidth*devicePixelRatio; c.height=c.clientHeight*devicePixelRatio; ctx.scale(devicePixelRatio,devicePixelRatio);
+      // sample months
+      const vals = [12000,22000,18000,26000,31000,27000,38000,42000,39000,45000,48000,52000];
+      const w=c.clientWidth, h=c.clientHeight; const pad=36;
+      ctx.clearRect(0,0,w,h);
+      // grid
+      ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
+      for(let i=0;i<5;i++){ctx.beginPath(); const y=pad + (i*(h-pad*2))/4; ctx.moveTo(pad,y); ctx.lineTo(w-pad,y); ctx.stroke()}
+      // area
+      const mx=Math.max(...vals), mn=Math.min(...vals);
+      ctx.beginPath(); vals.forEach((v,i)=>{const x = pad + (i*(w-pad*2))/(vals.length-1); const y = h-pad - ((v-mn)/(mx-mn))*(h-pad*2); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)});
+      // fill
+      ctx.lineTo(w-pad,h-pad); ctx.lineTo(pad,h-pad); ctx.closePath();
+      const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'rgba(19,136,8,0.14)'); g.addColorStop(1,'rgba(255,153,51,0.04)'); ctx.fillStyle=g; ctx.fill();
+      // line
+      ctx.beginPath(); ctx.lineWidth=2.8; const grad=ctx.createLinearGradient(0,0,w,0); grad.addColorStop(0,'var(--accent-2)'); grad.addColorStop(1,'var(--accent)'); ctx.strokeStyle=grad;
+      vals.forEach((v,i)=>{const x = pad + (i*(w-pad*2))/(vals.length-1); const y = h-pad - ((v-mn)/(mx-mn))*(h-pad*2); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)}); ctx.stroke();
+    }
+
+    function drawDonut(){
+      const c=document.getElementById('donut'); const ctx=c.getContext('2d'); c.width=c.clientWidth*devicePixelRatio; c.height=c.clientHeight*devicePixelRatio; ctx.scale(devicePixelRatio,devicePixelRatio);
+      const w=c.clientWidth, h=c.clientHeight; const data=[60,25,15]; const colors=['var(--accent)','var(--accent-2)','#FFD166'];
+      const total=data.reduce((a,b)=>a+b,0); let start=-Math.PI/2;
+      for(let i=0;i<data.length;i++){const slice=(data[i]/total)*(Math.PI*2); ctx.beginPath(); ctx.moveTo(w/2,h/2); ctx.arc(w/2,h/2,Math.min(w,h)/3,start,start+slice); ctx.closePath(); ctx.fillStyle=colors[i]; ctx.fill(); start+=slice}
+      // hole
+      ctx.beginPath(); ctx.fillStyle= 'rgba(7,20,36,0.9)'; ctx.arc(w/2,h/2,Math.min(w,h)/6,0,Math.PI*2); ctx.fill();
+      document.getElementById('organicPct').textContent = data[0]+'%'; document.getElementById('adsPct').textContent=data[1]+'%'; document.getElementById('refPct').textContent=data[2]+'%';
+    }
+
+    // Small attach
+    document.getElementById('addProductBtn').addEventListener('click',()=>openModal(false));
+    document.getElementById('closeModal').addEventListener('click',closeModal);
+    document.getElementById('saveProduct').addEventListener('click',saveProduct);
+    document.getElementById('mobileMenu').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('show'));
+    document.getElementById('globalSearch').addEventListener('input',e=>{
+      const q=e.target.value.toLowerCase(); document.querySelectorAll('#productsTable tbody tr').forEach(tr=>{tr.style.display = tr.innerText.toLowerCase().includes(q)?'':'none'})
+    });
+    
+    // Product tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        currentProductFilter = this.dataset.tab;
+        renderProducts();
+      });
+    });
+    
+    // Settings save
+    document.getElementById('saveSettings').addEventListener('click', function() {
+      showNotification('Settings saved successfully!');
+    });
+
+    // Navigation
+    document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',function(ev){ev.preventDefault(); document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('active')); this.classList.add('active'); const sec=this.dataset.section; document.querySelectorAll('.content-section').forEach(s=>s.style.display='none'); document.getElementById(sec).style.display='block'}) );
+
+    // Expose for onclicks in table
+    window.editProduct = editProduct; window.deleteProduct = deleteProduct;
+
+    // Init
+    function init(){ 
+      renderKPIs(); 
+      renderProducts(); 
+      renderOrders(); 
+      drawMainChart(); 
+      drawDonut();
+      
+      // spark small
+      const s=document.getElementById('spark1'); s.width=s.clientWidth*devicePixelRatio; s.height=s.clientHeight*devicePixelRatio; const sc=s.getContext('2d'); sc.scale(devicePixelRatio,devicePixelRatio); drawSpark(sc,[120,180,130,210,260,200,280]);
+      
+      // Add some random orders for demo with Indian names
+      if (orders.length < 10) {
+        const names = ['Aarav Sharma', 'Aditi Patel', 'Rohan Kumar', 'Sneha Singh', 'Vikram Reddy', 'Priya Iyer', 'Arjun Mehta', 'Ananya Joshi', 'Rahul Gupta', 'Divya Nair'];
+        const statuses = ['paid', 'pending', 'cancel'];
+        
+        for (let i = 0; i < 6; i++) {
+          orders.push({
+            id: `#${1005 + i}`,
+            customer: names[Math.floor(Math.random() * names.length)],
+            total: Math.floor(Math.random() * 2000) + 500,
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+            date: `2025-09-${25 + i}`
+          });
+        }
+        saveAll();
+        renderOrders();
+      }
+    }
+    init();
+
+    // Responsive redraw
+    let resizeTimer; window.addEventListener('resize',()=>{ clearTimeout(resizeTimer); resizeTimer=setTimeout(()=>{ drawMainChart(); drawDonut(); init(); },200)});
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click',()=>{
+      const toggle = document.getElementById('themeToggle');
+      toggle.classList.toggle('active');
+      
+      if(toggle.classList.contains('active')){
+        document.documentElement.style.setProperty('--accent','#FFD166');
+        document.documentElement.style.setProperty('--accent-2','#FF7AB6');
+        document.documentElement.style.setProperty('--bg','#1a1a2e');
+        document.documentElement.style.setProperty('--card','linear-gradient(135deg,#16213e 0%, #0f3460 100%)');
+      } else {
+        document.documentElement.style.setProperty('--accent','#FF9933');
+        document.documentElement.style.setProperty('--accent-2','#138808');
+        document.documentElement.style.setProperty('--bg','#0f1724');
+        document.documentElement.style.setProperty('--card','linear-gradient(135deg,#0b1220 0%, #122032 100%)');
+      }
+    });
+
+    // Modal click outside to close
+    document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg') closeModal()});
+
+  </script>
+</body>
+</html>

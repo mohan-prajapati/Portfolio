@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food & Beverage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #64c6ea;
+        }
+        .navbar {
+            background: rgb(81, 230, 237);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: left;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ca1414;
+        }
+        .hero p {
+            color: #1f0303;
+        }
+        .btn-custom {
+            background-color: #6C63FF;
+            color: white;
+            border-radius: 20px;
+            padding: 10px 20px;
+        }
+        .btn-custom:hover {
+            background-color: #5548D1;
+        }
+        .image-container img {
+            max-width: 100%;
+        }
+        .more-section {
+            background: rgb(103, 8, 220);
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .more-section h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .more-section p {
+            color: #d7d3ec;
+            max-width: 600px;
+            margin: auto;
+        }
+        .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+        }
+        .image-section {
+            padding: 60px 20px;
+            background: #f8f9fa;
+        }
+        .image-section img {
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .form-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+.form-container input, .form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.form-container button {
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <IMG src="asset/image/logo (1).png" style="marg;"></IMG>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Service</a></li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-primary" href="#">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="hero container mt-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                
+                <h1>Food and Beverage</h1>
+                <p>Food and beverages are more than just essentials—they are experiences that bring people together, create lasting memories, and elevate every moment. Whether it's a freshly brewed cup of coffee shared with a friend or a multi-course meal enjoyed with loved ones, the flavors we savor and the drinks we indulge in have the power to connect us. Great food can spark joy, surprise the senses, and transport us to different cultures, while a carefully crafted beverage can enhance the experience, adding depth and richness to any occasion. Together, they form the perfect combination, making every gathering not just a meal, but a celebration of life and flavor.</p>
+                <a href="#" class="btn btn-custom">READ MORE</a>
+            </div>
+            <div class="col-md-6 text-center image-container">
+                <img style="height: 300px; width: 350px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRohfLgqgevWBe2yLNpCJcXsFWfkgolpk1XGA&s" alt="Food and Beverage Illustration">
+            </div>
+        </div>
+    </section>
+
+    <!-- Carousel Section -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img style="height: fit-content; width: 20px;" src="https://www.holidify.com/images/cmsuploads/compressed/shutterstock_649541308_20191010160155.png " class="d-block w-100" alt="Food Image 1">
+            </div>
+            <div class="carousel-item">
+                <img style="height: fit-content;" src="https://www.vanfish.com/wp-content/uploads/2020/06/beer_cocktails.jpg" class="d-block w-100" alt="Beverage Image 1">
+            </div>
+            <div class="carousel-item">
+                <img style="height: fit-content;" src="https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?cs=srgb&dl=chair-cutlery-diner-941861.jpg&fm=jpg" class="d-block w-100" alt="Restaurant Image 1">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <section class="more-section">
+        <div class="container">
+            <h2>More About Our Services</h2>
+            <p style="">We provide high-quality food and beverage services, ensuring a great experience for our customers. Explore our wide range of products and offerings tailored to your needs.</p>
+        </div>
+    </section>
+    <section class="image-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="https://th.bing.com/th/id/OIP.4WUjqZXl4tBdfKEwgN9FKAHaE7?w=269&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Coffee" class="img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <img src="https://th.bing.com/th/id/OIP.eijMCAHd6wxQZdqXBTNQvAHaFE?w=238&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Juice" class="img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <img src="https://th.bing.com/th/id/OIP.BKfRBmza54YwKCCTM0QOzQHaE7?w=301&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Dessert" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="container">
+            <h2 style="text-align: center;"> ABOUT REVIEW</h2>
+        </div>
+    </section>
+    <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card">
+            <div class="card-body">
+
+              <h5 class="card-title">give a review [client]</h5>
+
+              
+
+              <p class="card-text"> Overall Experience
+                ☐ Excellent ☐ Good ☐ Average ☐ Poor
+                
+                Atmosphere/Environment
+                ☐ Excellent ☐ Good ☐ Average ☐ Poor
+                
+                Quality of Food
+                ☐ Excellent ☐ Good ☐ Average ☐ Poor
+                
+                Quality of Drinks
+                ☐ Excellent ☐ Good ☐ Average ☐ Poor
+                
+                Service
+                ☐ Excellent ☐ Good ☐ Average ☐ Poor
+                
+                Cleanliness
+                ☐ Excellent ☐ Good ☐ Average ☐ Poor
+            </p>
+              <a href="#" class="btn btn-primary">submit</a>
+
+
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Review for [f&b] </h5>
+              ⭐️⭐️⭐️⭐️⭐️ (5/5)
+              <p class="card-text">The menu offered a great variety of options, catering to different dietary preferences. I tried the [name of dish or drink], and it exceeded my expectations! The flavors were perfectly balanced, and the presentation was spot-on.</p>
+              <a href="#" class="btn btn-primary">Go more review</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section" id="consultation">
+        <h2 style="text-shadow: 3px 4px 2px rgb(255, 164, 164); font-style: oblique; color: red;" >Free Consultation</h2>
+        <div class="form-container">
+            <form>
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <input type="text" name="phone" placeholder="Your Phone Number" required>
+                <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
+                <button type="submit" style="display: hover;">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

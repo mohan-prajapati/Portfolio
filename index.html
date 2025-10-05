@@ -902,6 +902,84 @@
             box-shadow: var(--shadow-hover);
         }
 
+        /* Resume Section */
+        .resume {
+            padding: 120px 40px;
+            background: var(--secondary-bg);
+        }
+
+        .resume-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .resume-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .resume-column {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .resume-column:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .resume-column h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .resume-item {
+            margin-bottom: 30px;
+        }
+
+        .resume-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .resume-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .resume-item .company {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .resume-item .date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .resume-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .resume-download {
+            text-align: center;
+            margin-top: 60px;
+        }
+
         /* Footer */
         .footer {
             background: var(--secondary-bg);
@@ -990,6 +1068,11 @@
             .projects-grid {
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             }
+
+            .resume-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1026,7 +1109,8 @@
             .education,
             .work,
             .projects,
-            .contact {
+            .contact,
+            .resume {
                 padding: 80px 20px;
             }
 
@@ -1088,6 +1172,10 @@
                 width: 50px;
                 height: 50px;
             }
+
+            .resume-column {
+                padding: 30px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1121,6 +1209,10 @@
             .footer-links {
                 flex-direction: column;
                 gap: 20px;
+            }
+
+            .resume-column {
+                padding: 20px;
             }
         }
 
@@ -1229,6 +1321,7 @@
                 <li><a href="#education">Education</a></li>
                 <li><a href="#work">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li><a href="#resume">Resume</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <a href="#contact" class="contact-btn">Let's Talk</a>
@@ -1250,8 +1343,8 @@
             </p>
             <div class="hero-cta">
                 <a href="#projects" class="btn-primary">View My Projects</a>
-                <a href="#about" class="btn-secondary">
-                    Learn More <i class="fas fa-arrow-right"></i>
+                <a href="#resume" class="btn-secondary">
+                    View Resume <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
@@ -1368,7 +1461,7 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <div class="timeline-date">2022 - Present</div>
+                        <div class="timeline-date">2023 - 2026</div>
                         <h3 class="timeline-title">Bachelor of Computer Applications (BCA)</h3>
                         <div class="timeline-location">SDIMT, Delhi</div>
                         <p class="timeline-desc">
@@ -1380,7 +1473,7 @@
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <div class="timeline-date">2020 - 2022</div>
+                        <div class="timeline-date">2021 - 2023</div>
                         <h3 class="timeline-title">Intermediate (12th Grade)</h3>
                         <div class="timeline-location">CBSE Board</div>
                         <p class="timeline-desc">
@@ -1391,18 +1484,8 @@
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <div class="timeline-date">2021</div>
-                        <h3 class="timeline-title"> (10th Grade)</h3>
-                        <div class="timeline-location">CBSE Board</div>
-                        <p class="timeline-desc">
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">2023</div>
-                        <h3 class="timeline-title">High School (12th Grade)</h3>
+                        <div class="timeline-date">2020 - 2021</div>
+                        <h3 class="timeline-title">High School (10th Grade)</h3>
                         <div class="timeline-location">CBSE Board</div>
                         <p class="timeline-desc">
                             Completed high school education with distinction. Developed interest 
@@ -1427,15 +1510,36 @@
                 <div class="experience-card">
                     <div class="experience-header">
                         <div>
-                            <h3 class="experience-title">Frontend Developer Intern</h3>
-                            <div class="experience-company">Tech Solutions Inc.</div>
+                            <h3 class="experience-title">Restaurant Management System Intern</h3>
+                            <div class="experience-company">Web Development Project</div>
                         </div>
-                        <div class="experience-date">2025 - Present</div>
+                        <div class="experience-date">Mar 2025 - Present</div>
                     </div>
                     <p class="experience-description">
-                        Developed responsive web applications using React.js and modern CSS frameworks.
-                        Collaborated with UI/UX designers to implement pixel-perfect designs.
-                        Optimized application performance and implemented best practices for code quality.
+                        Developed a comprehensive restaurant management system with features for
+                        order management, inventory tracking, and customer relationship management.
+                        Implemented responsive design and intuitive user interface.
+                    </p>
+                    <div class="experience-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Responsive Design</span>
+                        <span class="tech-tag">UI/UX</span>
+                    </div>
+                </div>
+                <div class="experience-card">
+                    <div class="experience-header">
+                        <div>
+                            <h3 class="experience-title">Frontend Developer</h3>
+                            <div class="experience-company">Personal Projects</div>
+                        </div>
+                        <div class="experience-date">2024 - Present</div>
+                    </div>
+                    <p class="experience-description">
+                        Created multiple responsive web applications and websites focusing on
+                        modern design principles and user experience. Implemented interactive
+                        features and optimized performance for various devices.
                     </p>
                     <div class="experience-tech">
                         <span class="tech-tag">React</span>
@@ -1448,40 +1552,18 @@
                 <div class="experience-card">
                     <div class="experience-header">
                         <div>
-                            <h3 class="experience-title">Web Development Freelancer</h3>
-                            <div class="experience-company">Self-Employed</div>
+                            <h3 class="experience-title">UI/UX Design</h3>
+                            <div class="experience-company">Design Projects</div>
                         </div>
-                        <div class="experience-date">2024 - 2025</div>
+                        <div class="experience-date">2023 - Present</div>
                     </div>
                     <p class="experience-description">
-                        Created custom websites for small businesses and personal portfolios.
-                        Implemented responsive designs, optimized for various devices and browsers.
-                        Worked directly with clients to understand requirements and deliver solutions.
-                    </p>
-                    <div class="experience-tech">
-                        <span class="tech-tag">HTML5</span>
-                        <span class="tech-tag">CSS3</span>
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">Bootstrap</span>
-                        <span class="tech-tag">WordPress</span>
-                    </div>
-                </div>
-                <div class="experience-card">
-                    <div class="experience-header">
-                        <div>
-                            <h3 class="experience-title">UI/UX Design Intern</h3>
-                            <div class="experience-company">Design Studio</div>
-                        </div>
-                        <div class="experience-date">2023 - 2025</div>
-                    </div>
-                    <p class="experience-description">
-                        Assisted in creating wireframes, mockups, and prototypes for web applications.
-                        Learned principles of user-centered design and usability testing.
-                        Collaborated with developers to ensure design implementation accuracy.
+                        Designed user interfaces for web applications focusing on usability
+                        and aesthetic appeal. Created wireframes, mockups, and prototypes
+                        using modern design tools and principles.
                     </p>
                     <div class="experience-tech">
                         <span class="tech-tag">Figma</span>
-                        <span class="tech-tag">Adobe XD</span>
                         <span class="tech-tag">UI/UX Design</span>
                         <span class="tech-tag">Wireframing</span>
                         <span class="tech-tag">Prototyping</span>
@@ -1503,18 +1585,18 @@
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-number">01</div>
-                    <h3 class="project-title">E-Commerce Dashboard</h3>
+                    <h3 class="project-title">Restaurant Management System</h3>
                     <p class="project-description">
-                        Built a responsive e-commerce dashboard with React, TypeScript, and Tailwind CSS.
-                        Implemented real-time analytics, product management, and order tracking with
-                        interactive charts and data visualization.
+                        Developed a comprehensive restaurant management system with order tracking,
+                        inventory management, and customer relationship features. Implemented
+                        responsive design and intuitive user interface for seamless operation.
                     </p>
                     <div class="experience-tech">
-                        <span class="tech-tag">React</span>
-                        <span class="tech-tag">TypeScript</span>
-                        <span class="tech-tag">Tailwind CSS</span>
-                        <span class="tech-tag">Chart.js</span>
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
                         <span class="tech-tag">Responsive</span>
+                        <span class="tech-tag">UI/UX</span>
                     </div>
                     <a href="https://github.com/mohanprajapati" class="project-link">
                         View Project <i class="fas fa-arrow-right"></i>
@@ -1522,25 +1604,6 @@
                 </div>
                 <div class="project-card">
                     <div class="project-number">02</div>
-                    <h3 class="project-title">Task Management App</h3>
-                    <p class="project-description">
-                        Created a collaborative task management application with drag-and-drop
-                        functionality, real-time updates, and team collaboration features.
-                        Built with Angular and Firebase for seamless user experience.
-                    </p>
-                    <div class="experience-tech">
-                        <span class="tech-tag">Angular</span>
-                        <span class="tech-tag">Firebase</span>
-                        <span class="tech-tag">RxJS</span>
-                        <span class="tech-tag">Drag & Drop</span>
-                        <span class="tech-tag">Real-time</span>
-                    </div>
-                    <a href="https://github.com/mohanprajapati" class="project-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="project-card">
-                    <div class="project-number">03</div>
                     <h3 class="project-title">Portfolio Website</h3>
                     <p class="project-description">
                         Designed and developed a responsive portfolio website with modern UI/UX principles.
@@ -1558,9 +1621,87 @@
                         View Project <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
+                <div class="project-card">
+                    <div class="project-number">03</div>
+                    <h3 class="project-title">E-Commerce Dashboard</h3>
+                    <p class="project-description">
+                        Built a responsive e-commerce dashboard with product management,
+                        order tracking, and analytics features. Focused on creating an
+                        intuitive user interface with modern design principles.
+                    </p>
+                    <div class="experience-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">Responsive</span>
+                        <span class="tech-tag">UI/UX</span>
+                    </div>
+                    <a href="https://github.com/mohanprajapati" class="project-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
-            <div class="more-projects">
+            <div class="more-projects" style="text-align: center; margin-top: 60px;">
                 <a href="https://github.com/mohanprajapati" class="btn-primary">View All Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section class="resume" id="resume">
+        <div class="resume-container">
+            <div class="section-header">
+                <h2 class="section-title">My Resume</h2>
+                <p class="section-subtitle">
+                    A comprehensive overview of my skills, experience, and education
+                </p>
+            </div>
+            <div class="resume-content">
+                <div class="resume-column">
+                    <h3>Education</h3>
+                    <div class="resume-item">
+                        <h4>Bachelor of Computer Applications (BCA)</h4>
+                        <div class="company">SDIMT, Delhi</div>
+                        <div class="date">2023 - 2026</div>
+                        <p>Currently pursuing degree with focus on web development and software engineering.</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Intermediate (12th Grade)</h4>
+                        <div class="company">CBSE Board</div>
+                        <div class="date">2021 - 2023</div>
+                        <p>Completed with computer science as main subject, developing foundational programming skills.</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>High School (10th Grade)</h4>
+                        <div class="company">CBSE Board</div>
+                        <div class="date">2020 - 2021</div>
+                        <p>Completed with distinction, developing interest in technology and computer applications.</p>
+                    </div>
+                </div>
+                <div class="resume-column">
+                    <h3>Experience & Skills</h3>
+                    <div class="resume-item">
+                        <h4>Restaurant Management System Intern</h4>
+                        <div class="company">Web Development Project</div>
+                        <div class="date">Mar 2025 - Present</div>
+                        <p>Developed comprehensive management system with responsive design and intuitive UI.</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Technical Skills</h4>
+                        <p><strong>Programming Languages:</strong> C, C++, Python, JavaScript</p>
+                        <p><strong>Web Technologies:</strong> HTML5, CSS3, React, Angular, Vue.js</p>
+                        <p><strong>Tools & Frameworks:</strong> Git, Figma, Tailwind CSS, Sass</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Soft Skills</h4>
+                        <p>Problem Solving, Team Collaboration, Communication, Time Management, Adaptability</p>
+                    </div>
+                </div>
+            </div>
+            <div class="resume-download">
+                <a href="C:\Users\Ravi Prajapati\OneDrive\Desktop\my web\resume" class="btn-primary" id="download-resume">
+                    <i class="fas fa-download"></i> Download Resume (Vc:\Users\Ravi Prajapati\Downloads\Mohan_Prajapati_Resume_Professional_Designed (1).pdf)
+                </a>
             </div>
         </div>
     </section>
@@ -1883,6 +2024,21 @@
                 ease: 'power3.out'
             });
 
+            // Resume columns
+            gsap.to('.resume-column', {
+                scrollTrigger: {
+                    trigger: '.resume-column',
+                    start: 'top 80%',
+                    end: 'bottom 20%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.3,
+                ease: 'power3.out'
+            });
+
             // Contact form
             gsap.to('.contact-form', {
                 scrollTrigger: {
@@ -1914,6 +2070,12 @@
             } else {
                 alert('Please fill in all fields.');
             }
+        });
+
+        // Resume download functionality
+        document.getElementById('download-resume').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Resume download functionality would be implemented here. In a real implementation, this would download a PDF file.');
         });
 
         // Initialize particles
